@@ -143,8 +143,8 @@ CREATE TABLE property_profiles(
 DROP TABLE IF EXISTS bookings;
 CREATE TABLE bookings(
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	user_id BIGINT UNSIGNED NOT NULL UNIQUE,
-	property_id BIGINT UNSIGNED NOT NULL UNIQUE,
+	user_id BIGINT UNSIGNED NOT NULL,
+	property_id BIGINT UNSIGNED NOT NULL,
 	room_type_id SMALLINT UNSIGNED NOT NULL,
 	room_count TINYINT, -- количество забронированных номеров
 	booked_from_date DATE,
