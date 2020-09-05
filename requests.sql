@@ -91,7 +91,7 @@ join property_profiles as pp on pp.property_id = pr.id
 where pp.property_facilities like '%parking%'
 order by pr.country_id;
 
--- Вывести все объекты размещения в старне с указаным типом кроватей
+-- Вывести все объекты размещения в стране с указаным типом кроватей
 
 select
 	pr.property_name as 'property name',
