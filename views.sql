@@ -15,7 +15,7 @@ from booking.properties pr
 join booking.property_types pt on pt.id = pr.property_type_id
 join booking.property_profiles pp on pp.property_id = pr.id 
 join booking.cities c on c.id = pr.city_id 
-join booking.countries c2 on c2.id = pr.country_id;
+join booking.countries c2 on c2.id = c.country_id ;
 
 
 -- Представление с информацией о пользователях (не владельцах объектов размещения) с списком их настроек
@@ -35,3 +35,20 @@ where u.property_owner = 0;
 
 
 -- Представление с информацией о пользователях с краткой информацией о их объектах размещения
+
+drop view if exists property_owners;
+create view property_owners as
+select
+	concat(u.firstname,' ',u.lastname) as 'user name',
+	u.email as 'email',
+	u.phone as 'phone',
+	pr.property_name as 'property name',
+	pt.name as 'property type',
+	c.name as 'city',
+	c2.name as 'country'
+from booking.users u 
+join booking.properties pr on pr.user_id = u.id
+join booking.property_types pt on pt.id = pr.property_type_id 
+join booking.cities c on c.id = pr.city_id 
+join booking.countries c2 on c2.id = c.country_id 
+where u.property_owner = 1;

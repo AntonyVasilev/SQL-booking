@@ -12,12 +12,15 @@ select * from messages where to_user_id = @user and status = 'sent';
 
 -- Вывести количество объектов размещения в каждом городе
 
-select 
+select
+	c2.name as 'country',
     c.name as 'city',
     count(p.id) as 'count'
 from properties as p
 join cities as c on c.id = p.city_id
-group by p.city_id;
+join countries as c2 on c2.id = c.country_id 
+group by p.city_id
+order by c2.name;
 
 
 -- Вывести количество бронирований, совершенных мужчинами и женщинами
@@ -55,7 +58,7 @@ select
 from properties as pr
 join cities as c on c.id = pr.city_id
 join property_types as pts on pts.id = pr.property_type_id
-join countries as cn on cn.id = pr.country_id
+join countries as cn on cn.id = c.country_id 
 join property_profiles as prf on prf.property_id = pr.id
 where c.`name` = 'Port Rubiemouth';
 
@@ -86,10 +89,10 @@ select
     co.name as 'country'
 from properties as pr
 join cities as ct on ct.id = pr.city_id
-join countries as co on co.id = pr.country_id
+join countries as co on co.id = ct.country_id 
 join property_profiles as pp on pp.property_id = pr.id
 where pp.property_facilities like '%parking%'
-order by pr.country_id;
+order by co.name;
 
 -- Вывести все объекты размещения в стране с указаным типом кроватей
 
@@ -106,7 +109,7 @@ join property_profiles as pp on pp.property_id = pr.id
 join room_types as rt on rt.id = pp.room_type_id
 join bed_types as bt on bt.id = rt.bed_type_id
 join cities as ct on ct.id = pr.city_id
-join countries as co on co.id = pr.country_id
+join countries as co on co.id = ct.country_id 
 where bt.bed_type rlike 'single_bed';  -- использую rlike, т.к. при заполненении таблицы в названии могут встречаться пробелы в начале
 
 
