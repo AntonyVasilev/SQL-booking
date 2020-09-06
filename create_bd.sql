@@ -30,7 +30,7 @@ CREATE TABLE cities (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
     country_id SMALLINT UNSIGNED NOT NULL,
     name VARCHAR(50),
-    FOREIGN KEY (country_id) REFERENCES `countries`(id)
+    CONSTRAINT `cities_ibfk_1` FOREIGN KEY (country_id) REFERENCES `countries`(id) -- ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS payment_card_types;
@@ -73,10 +73,10 @@ CREATE TABLE settings(
 	smoking_preference ENUM ('yes', 'no'),
 	reservation_emails_id BIGINT UNSIGNED NOT NULL,
 	newsletter_preferences_id BIGINT UNSIGNED NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY (preferred_card_types_id) REFERENCES payment_card_types(id),
-	FOREIGN KEY (reservation_emails_id) REFERENCES reservation_emails(id),
-	FOREIGN KEY (newsletter_preferences_id) REFERENCES newsletter_preferences(id)
+	FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (preferred_card_types_id) REFERENCES payment_card_types(id), -- ON DELETE SET NULL ON UPDATE CASCADE,
+	FOREIGN KEY (reservation_emails_id) REFERENCES reservation_emails(id), -- ON DELETE SET NULL ON UPDATE CASCADE,
+	FOREIGN KEY (newsletter_preferences_id) REFERENCES newsletter_preferences(id) -- ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS property_types;
@@ -96,9 +96,9 @@ CREATE TABLE properties(
     rating FLOAT(2,1),
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (city_id) REFERENCES cities(id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (property_type_id) REFERENCES property_types(id),
+    FOREIGN KEY (city_id) REFERENCES cities(id), -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
+    FOREIGN KEY (property_type_id) REFERENCES property_types(id), -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
     INDEX property_name_idx(property_name)
 );
 
@@ -119,7 +119,7 @@ CREATE TABLE room_types(
     smoke_allowed BIT,
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (bed_type_id) REFERENCES bed_types(id),
+    FOREIGN KEY (bed_type_id) REFERENCES bed_types(id), -- ON DELETE SET NULL ON UPDATE CASCADE,
     INDEX room_type_idx(room_type)
 );
 
@@ -134,8 +134,8 @@ CREATE TABLE property_profiles(
     meals SET('breakfast', 'lunch', 'dinner'),
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (property_id) REFERENCES properties(id),
-    FOREIGN KEY (room_type_id) REFERENCES room_types(id)
+    FOREIGN KEY (property_id) REFERENCES properties(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (room_type_id) REFERENCES room_types(id) -- ON DELETE RESTRICT ON UPDATE CASCADE
 ) COMMENT 'описание услуг и удобств объекта недвижимости';
 
 DROP TABLE IF EXISTS bookings;
@@ -150,9 +150,9 @@ CREATE TABLE bookings(
 	book_type ENUM ('requested', 'confirmed', 'canceled'),
 	created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (property_id) REFERENCES properties(id),
-    FOREIGN KEY (room_type_id) REFERENCES room_types(id)
+    FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (property_id) REFERENCES properties(id), -- ON UPDATE CASCADE,
+    FOREIGN KEY (room_type_id) REFERENCES room_types(id) -- ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS reviews; 
@@ -166,8 +166,8 @@ CREATE TABLE reviews(
 	whats_dislike VARCHAR (255), -- что не понравилось
 	created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (property_id) REFERENCES properties(id)
+    FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (property_id) REFERENCES properties(id) -- ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS messages;
@@ -178,6 +178,12 @@ CREATE TABLE messages(
     `status` ENUM('sent', 'read'),
     sent_at DATETIME DEFAULT NOW(),
 	read_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (from_user_id) REFERENCES users(id),
-    FOREIGN KEY (to_user_id) REFERENCES users(id)
+    FOREIGN KEY (from_user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (to_user_id) REFERENCES users(id) -- ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+/* ALTER TABLE messages 
+ADD FOREIGN KEY (from_user_id) 
+REFERENCES users(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE; */

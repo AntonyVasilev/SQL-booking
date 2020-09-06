@@ -43,9 +43,9 @@ CREATE TABLE `bookings` (
   KEY `room_type_id` (`room_type_id`),
   KEY `bookings_ibfk_1` (`user_id`),
   KEY `bookings_ibfk_2` (`property_id`),
-  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`),
-  CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`)
+  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) -- ON UPDATE CASCADE,
+  CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) -- ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `bookings` VALUES ('1','1','1','1','1','2001-09-04','1978-07-01','requested','1977-12-15 04:25:55','2020-07-10 13:48:17'),
@@ -1057,7 +1057,7 @@ CREATE TABLE `cities` (
   `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `country_id` (`country_id`),
-  CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`)
+  CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `cities` VALUES ('1','1','Feestburgh'),
@@ -1332,8 +1332,8 @@ CREATE TABLE `messages` (
   `read_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   KEY `from_user_id` (`from_user_id`),
   KEY `to_user_id` (`to_user_id`),
-  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`from_user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`from_user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `messages` VALUES ('91','264','Omnis odit debitis nemo accusamus voluptatem debitis modi. Magni est aspernatur quis id qui. Nesciunt dolores et quis sint facere. Doloremque id iste doloribus blanditiis.','sent','1970-04-22 14:06:45','2000-10-26 16:00:34'),
@@ -2541,9 +2541,9 @@ CREATE TABLE `properties` (
   KEY `user_id` (`user_id`),
   KEY `property_type_id` (`property_type_id`),
   KEY `property_name_idx` (`property_name`),
-  CONSTRAINT `properties_ibfk_2` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
-  CONSTRAINT `properties_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `properties_ibfk_4` FOREIGN KEY (`property_type_id`) REFERENCES `property_types` (`id`)
+  CONSTRAINT `properties_ibfk_2` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
+  CONSTRAINT `properties_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
+  CONSTRAINT `properties_ibfk_4` FOREIGN KEY (`property_type_id`) REFERENCES `property_types` (`id`) -- ON DELETE CONSTRAINT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `properties` VALUES ('1','1','est','1','1','3488 Beatty Summit\nSouth Savannah, NH 75520','0.7','1990-11-10 10:25:06','1985-11-08 19:36:31'),
@@ -2861,8 +2861,8 @@ CREATE TABLE `property_profiles` (
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   UNIQUE KEY `property_id` (`property_id`),
   KEY `room_type_id` (`room_type_id`),
-  CONSTRAINT `property_profiles_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`),
-  CONSTRAINT `property_profiles_ibfk_2` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`)
+  CONSTRAINT `property_profiles_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `property_profiles_ibfk_2` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) -- ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='описание услуг и удобств объекта недвижимости';
 
 insert INTO `property_profiles` VALUES 
@@ -3309,8 +3309,8 @@ CREATE TABLE `reviews` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `property_id` (`property_id`),
   UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`)
+  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `reviews` VALUES ('1','1','1','4','Debitis perspiciatis sit non laboriosam voluptate ','Hatter: \'but you could only hear whispers now and then, \'we went to school in the pool, \'and she sits purring so nicely by the officers of the.','Lobster Quadrille, that she hardly knew what she did, she picked her way out. \'I shall be late!\'.','2008-05-30 08:31:57','2011-05-21 19:19:30'),
@@ -3529,7 +3529,7 @@ CREATE TABLE `room_types` (
   UNIQUE KEY `id` (`id`),
   KEY `bed_type_id` (`bed_type_id`),
   KEY `room_type_idx` (`room_type`),
-  CONSTRAINT `room_types_ibfk_1` FOREIGN KEY (`bed_type_id`) REFERENCES `bed_types` (`id`)
+  CONSTRAINT `room_types_ibfk_1` FOREIGN KEY (`bed_type_id`) REFERENCES `bed_types` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `room_types` VALUES ('1','occaecati','2','39',('bath,toilet,heating,air_conditioning,TV,cable_internet,Wi-Fi,Telephone,kitchenette'),'1','1','1986-03-12 08:40:26','2003-12-06 03:12:42'),
@@ -3597,10 +3597,10 @@ CREATE TABLE `settings` (
   KEY `preferred_card_types_id` (`preferred_card_types_id`),
   KEY `reservation_emails_id` (`reservation_emails_id`),
   KEY `newsletter_preferences_id` (`newsletter_preferences_id`),
-  CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `settings_ibfk_2` FOREIGN KEY (`preferred_card_types_id`) REFERENCES `payment_card_types` (`id`),
-  CONSTRAINT `settings_ibfk_3` FOREIGN KEY (`reservation_emails_id`) REFERENCES `reservation_emails` (`id`),
-  CONSTRAINT `settings_ibfk_4` FOREIGN KEY (`newsletter_preferences_id`) REFERENCES `newsletter_preferences` (`id`)
+  CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `settings_ibfk_2` FOREIGN KEY (`preferred_card_types_id`) REFERENCES `payment_card_types` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `settings_ibfk_3` FOREIGN KEY (`reservation_emails_id`) REFERENCES `reservation_emails` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `settings_ibfk_4` FOREIGN KEY (`newsletter_preferences_id`) REFERENCES `newsletter_preferences` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `settings` VALUES ('1','1','1','yes','1','1'),
