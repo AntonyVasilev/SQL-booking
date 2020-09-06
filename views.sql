@@ -1,7 +1,21 @@
+-- Представление со всеми объектами размещения с парковкой
+
+create or replace view properties_with_parking as
+select
+	pr.property_name as 'property name',
+    ct.name as 'city',
+    co.name as 'country'
+from properties as pr
+join cities as ct on ct.id = pr.city_id
+join countries as co on co.id = ct.country_id 
+join property_profiles as pp on pp.property_id = pr.id
+where pp.property_facilities like '%parking%'
+order by co.name;
+
+
 -- Передставление с подробной информацией об отелях
 
-drop view if exists prop_info;
-create view prop_info as
+create or replace view prop_info as
 select
     pr.property_name as 'name',
     pt.name as 'property type',
@@ -20,8 +34,7 @@ join booking.countries c2 on c2.id = c.country_id ;
 
 -- Представление с информацией о пользователях (не владельцах объектов размещения) с списком их настроек
 
-drop view if exists users_info;
-create view users_info as
+create or replace view users_info as
 select
     concat(u.firstname,' ',u.lastname) as 'user',
     pct.payment_card_type as 'preferred card type',
@@ -36,8 +49,7 @@ where u.property_owner = 0;
 
 -- Представление с информацией о пользователях с краткой информацией о их объектах размещения
 
-drop view if exists property_owners;
-create view property_owners as
+create or replace view property_owners as
 select
 	concat(u.firstname,' ',u.lastname) as 'user name',
 	u.email as 'email',

@@ -114,7 +114,7 @@ CREATE TABLE room_types(
     room_type VARCHAR (50),
     max_sleeps TINYINT, -- максимальное количество спальных мест
     room_size TINYINT, -- площадь номера
-    room_facilities SET ('bath', 'hower', 'toilet', 'heating', 'air_conditioning', 'TV', 'cable_internet', 'Wi-Fi', 'Telephone', 'kitchenette'), -- удобства в номере
+    room_facilities SET ('bath','shower','toilet','heating','air_conditioning','TV','cable_internet','Wi-Fi','Telephone','kitchenette'), -- удобства в номере
     bed_type_id TINYINT UNSIGNED NOT NULL,
     smoke_allowed BIT,
     created_at DATETIME DEFAULT NOW(),

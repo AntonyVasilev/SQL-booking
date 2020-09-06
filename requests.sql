@@ -23,24 +23,7 @@ group by p.city_id
 order by c2.name;
 
 
--- Вывести количество бронирований, совершенных мужчинами и женщинами
-
-select 
-	'male',
-	count(id) as count 
-from bookings
-where user_id in
-(select id from users where gender = 'm')
-union 
-select 
-	'female',
-	count(id) as count 
-from bookings
-where user_id in
-(select id from users where gender = 'f');
-
-
--- Вывести информацию об объектах размещения в указанном городе
+-- Вывести информациею об объектах размещения в указанном городе
 
 select 
 	pr.id as 'id',
@@ -80,19 +63,6 @@ join properties as pr on pr.id = b.property_id
 join room_types as rt on rt.id = b.room_type_id
 where b.user_id = '5';
 
-
--- Вывести все объекты размещения с парковкой
-
-select
-	pr.property_name as 'property name',
-    ct.name as 'city',
-    co.name as 'country'
-from properties as pr
-join cities as ct on ct.id = pr.city_id
-join countries as co on co.id = ct.country_id 
-join property_profiles as pp on pp.property_id = pr.id
-where pp.property_facilities like '%parking%'
-order by co.name;
 
 -- Вывести все объекты размещения в стране с указаным типом кроватей
 
