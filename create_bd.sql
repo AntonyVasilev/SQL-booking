@@ -29,9 +29,14 @@ DROP TABLE IF EXISTS cities;
 CREATE TABLE cities (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
     country_id SMALLINT UNSIGNED NOT NULL,
-    name VARCHAR(50),
-    CONSTRAINT `cities_ibfk_1` FOREIGN KEY (country_id) REFERENCES `countries`(id) -- ON DELETE SET NULL ON UPDATE CASCADE
+    name VARCHAR(50)
 );
+
+ALTER TABLE cities 
+ADD CONSTRAINT FOREIGN KEY (country_id) 
+REFERENCES `countries`(id)
+ON DELETE SET NULL 
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS payment_card_types;
 CREATE TABLE payment_card_types(
@@ -72,12 +77,32 @@ CREATE TABLE settings(
 	preferred_card_types_id TINYINT UNSIGNED NOT NULL,
 	smoking_preference ENUM ('yes', 'no'),
 	reservation_emails_id BIGINT UNSIGNED NOT NULL,
-	newsletter_preferences_id BIGINT UNSIGNED NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (preferred_card_types_id) REFERENCES payment_card_types(id), -- ON DELETE SET NULL ON UPDATE CASCADE,
-	FOREIGN KEY (reservation_emails_id) REFERENCES reservation_emails(id), -- ON DELETE SET NULL ON UPDATE CASCADE,
-	FOREIGN KEY (newsletter_preferences_id) REFERENCES newsletter_preferences(id) -- ON DELETE SET NULL ON UPDATE CASCADE
+	newsletter_preferences_id BIGINT UNSIGNED NOT NULL
 );
+
+ALTER TABLE settings 
+ADD FOREIGN KEY (user_id) 
+REFERENCES users(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;
+
+ALTER TABLE settings 
+ADD FOREIGN KEY (preferred_card_types_id) 
+REFERENCES payment_card_types(id)
+ON DELETE SET NULL 
+ON UPDATE CASCADE;
+
+ALTER TABLE settings 
+ADD FOREIGN KEY (reservation_emails_id) 
+REFERENCES reservation_emails(id)
+ON DELETE SET NULL 
+ON UPDATE CASCADE;
+
+ALTER TABLE settings 
+ADD FOREIGN KEY (newsletter_preferences_id) 
+REFERENCES newsletter_preferences(id)
+ON DELETE SET NULL 
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS property_types;
 CREATE TABLE property_types(
@@ -96,11 +121,26 @@ CREATE TABLE properties(
     rating FLOAT(2,1),
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (city_id) REFERENCES cities(id), -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
-    FOREIGN KEY (property_type_id) REFERENCES property_types(id), -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
     INDEX property_name_idx(property_name)
 );
+
+ALTER TABLE properties 
+ADD FOREIGN KEY (city_id) 
+REFERENCES cities(id)
+ON DELETE CONSTRAINT 
+ON UPDATE CASCADE;
+
+ALTER TABLE properties 
+ADD FOREIGN KEY (user_id) 
+REFERENCES users(id)
+ON DELETE CONSTRAINT 
+ON UPDATE CASCADE;
+
+ALTER TABLE properties 
+ADD FOREIGN KEY (property_type_id) 
+REFERENCES property_types(id)
+ON DELETE CONSTRAINT
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS bed_types;
 CREATE TABLE bed_types(
@@ -119,9 +159,14 @@ CREATE TABLE room_types(
     smoke_allowed BIT,
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (bed_type_id) REFERENCES bed_types(id), -- ON DELETE SET NULL ON UPDATE CASCADE,
     INDEX room_type_idx(room_type)
 );
+
+ALTER TABLE room_types 
+ADD FOREIGN KEY (bed_type_id) 
+REFERENCES bed_types(id)
+ON DELETE SET NULL 
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS property_profiles;
 CREATE TABLE property_profiles(
@@ -133,10 +178,20 @@ CREATE TABLE property_profiles(
     bank_cards_allowed SET ('visa', 'mastercard', 'JCB', 'american_express', 'union_pay', 'diners_club', 'mir'),
     meals SET('breakfast', 'lunch', 'dinner'),
     created_at DATETIME DEFAULT NOW(),
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (property_id) REFERENCES properties(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (room_type_id) REFERENCES room_types(id) -- ON DELETE RESTRICT ON UPDATE CASCADE
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
 ) COMMENT 'описание услуг и удобств объекта недвижимости';
+
+ALTER TABLE property_profiles 
+ADD FOREIGN KEY (property_id) 
+REFERENCES properties(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;
+
+ALTER TABLE property_profiles 
+ADD FOREIGN KEY (room_type_id) 
+REFERENCES room_types(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS bookings;
 CREATE TABLE bookings(
@@ -149,11 +204,24 @@ CREATE TABLE bookings(
 	booked_till_date DATE,
 	book_type ENUM ('requested', 'confirmed', 'canceled'),
 	created_at DATETIME DEFAULT NOW(),
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (property_id) REFERENCES properties(id), -- ON UPDATE CASCADE,
-    FOREIGN KEY (room_type_id) REFERENCES room_types(id) -- ON UPDATE CASCADE
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
 );
+
+ALTER TABLE bookings 
+ADD FOREIGN KEY (user_id) 
+REFERENCES users(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;
+
+ALTER TABLE bookings 
+ADD FOREIGN KEY (property_id) 
+REFERENCES properties(id) 
+ON UPDATE CASCADE;
+
+ALTER TABLE bookings 
+ADD FOREIGN KEY (room_type_id) 
+REFERENCES room_types(id) 
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS reviews; 
 CREATE TABLE reviews(
@@ -165,10 +233,20 @@ CREATE TABLE reviews(
 	whats_like VARCHAR (255), -- что понравилось
 	whats_dislike VARCHAR (255), -- что не понравилось
 	created_at DATETIME DEFAULT NOW(),
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (property_id) REFERENCES properties(id) -- ON DELETE CASCADE ON UPDATE CASCADE
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
 );
+
+ALTER TABLE reviews 
+ADD FOREIGN KEY (user_id) 
+REFERENCES users(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;
+
+ALTER TABLE reviews 
+ADD FOREIGN KEY (property_id) 
+REFERENCES properties(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages(
@@ -177,13 +255,17 @@ CREATE TABLE messages(
     body TEXT,
     `status` ENUM('sent', 'read'),
     sent_at DATETIME DEFAULT NOW(),
-	read_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (from_user_id) REFERENCES users(id), -- ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (to_user_id) REFERENCES users(id) -- ON DELETE CASCADE ON UPDATE CASCADE
+	read_at DATETIME ON UPDATE CURRENT_TIMESTAMP
 );
 
-/* ALTER TABLE messages 
+ALTER TABLE messages 
 ADD FOREIGN KEY (from_user_id) 
 REFERENCES users(id)
 ON DELETE CASCADE 
-ON UPDATE CASCADE; */
+ON UPDATE CASCADE;
+
+ALTER TABLE messages 
+ADD FOREIGN KEY (to_user_id) 
+REFERENCES users(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE;

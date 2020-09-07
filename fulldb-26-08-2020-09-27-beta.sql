@@ -1,24 +1,3 @@
--- Generation time: Wed, 26 Aug 2020 09:27:05 +0000
--- Host: mysql.hostinger.ro
--- DB name: u574849695_18
-/*!40030 SET NAMES UTF8 */;
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-DROP TABLE IF EXISTS `bed_types`;
-CREATE TABLE `bed_types` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `bed_type` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `bed_types` VALUES ('1',' cot'),
 ('2',' king_size_bed'),
 ('3',' sofa_bed'),
@@ -26,27 +5,6 @@ INSERT INTO `bed_types` VALUES ('1',' cot'),
 ('5',' single_bed'),
 ('6',' queen_size_bed'); 
 
-
-DROP TABLE IF EXISTS `bookings`;
-CREATE TABLE `bookings` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `property_id` bigint(20) unsigned NOT NULL,
-  `room_type_id` smallint(5) unsigned NOT NULL,
-  `room_count` tinyint(4) DEFAULT NULL,
-  `booked_from_date` date DEFAULT NULL,
-  `booked_till_date` date DEFAULT NULL,
-  `book_type` enum('requested','confirmed','canceled') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `room_type_id` (`room_type_id`),
-  KEY `bookings_ibfk_1` (`user_id`),
-  KEY `bookings_ibfk_2` (`property_id`),
-  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) -- ON UPDATE CASCADE,
-  CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) -- ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `bookings` VALUES ('1','1','1','1','1','2001-09-04','1978-07-01','requested','1977-12-15 04:25:55','2020-07-10 13:48:17'),
 ('2','2','2','2','3','1976-08-18','2018-03-24','canceled','1993-10-28 16:25:28','1991-01-31 16:11:55'),
@@ -1050,16 +1008,6 @@ INSERT INTO `bookings` VALUES ('1','1','1','1','1','2001-09-04','1978-07-01','re
 ('1000','200','100','50','1','2001-06-12','1971-03-25','confirmed','2015-04-11 09:06:12','2009-05-19 13:34:50'); 
 
 
-DROP TABLE IF EXISTS `cities`;
-CREATE TABLE `cities` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `country_id` smallint(5) unsigned NOT NULL,
-  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `id` (`id`),
-  KEY `country_id` (`country_id`),
-  CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `cities` VALUES ('1','1','Feestburgh'),
 ('2','2','Mariannehaven'),
 ('3','3','Stehrview'),
@@ -1262,14 +1210,6 @@ INSERT INTO `cities` VALUES ('1','1','Feestburgh'),
 ('200','50','Laruechester'); 
 
 
-DROP TABLE IF EXISTS `countries`;
-CREATE TABLE `countries` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `region` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `countries` VALUES ('1','Malawi',' Americas'),
 ('2','Benin',' Americas'),
 ('3','Guinea-Bissau',' Europe'),
@@ -1321,20 +1261,6 @@ INSERT INTO `countries` VALUES ('1','Malawi',' Americas'),
 ('49','Botswana',' Europe'),
 ('50','Cape Verde',' Oceania'); 
 
-
-DROP TABLE IF EXISTS `messages`;
-CREATE TABLE `messages` (
-  `from_user_id` bigint(20) unsigned NOT NULL,
-  `to_user_id` bigint(20) unsigned NOT NULL,
-  `body` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status` enum('sent','read') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `sent_at` datetime DEFAULT current_timestamp(),
-  `read_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  KEY `from_user_id` (`from_user_id`),
-  KEY `to_user_id` (`to_user_id`),
-  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`from_user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `messages` VALUES ('91','264','Omnis odit debitis nemo accusamus voluptatem debitis modi. Magni est aspernatur quis id qui. Nesciunt dolores et quis sint facere. Doloremque id iste doloribus blanditiis.','sent','1970-04-22 14:06:45','2000-10-26 16:00:34'),
 ('194','388','Ipsam odit necessitatibus qui ex repellendus non et. Saepe officiis iure soluta. Voluptates eos neque veritatis harum est alias quo.','read','1977-06-17 13:54:07','1994-05-27 19:58:51'),
@@ -2338,25 +2264,6 @@ INSERT INTO `messages` VALUES ('91','264','Omnis odit debitis nemo accusamus vol
 ('150','33','Quo iure iure id et veritatis est assumenda. Fugit neque beatae amet vitae beatae voluptate laudantium voluptate. Laboriosam magnam nihil recusandae ratione rerum qui velit.','sent','1990-09-01 13:42:53','1996-12-20 07:48:13'); 
 
 
-DROP TABLE IF EXISTS `newsletter_preferences`;
-CREATE TABLE `newsletter_preferences` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `deal_discovery` bit(1) DEFAULT NULL,
-  `rewards` bit(1) DEFAULT NULL,
-  `refer_a_friend` bit(1) DEFAULT NULL,
-  `search_assistant` bit(1) DEFAULT NULL,
-  `personal_offers_through_the_post` bit(1) DEFAULT NULL,
-  `attractions_and_tours` bit(1) DEFAULT NULL,
-  `extra_services_for_your_stay` bit(1) DEFAULT NULL,
-  `restaurant_guides_and_offers` bit(1) DEFAULT NULL,
-  `shopping_and_events` bit(1) DEFAULT NULL,
-  `travel_guides` bit(1) DEFAULT NULL,
-  `transport_deals_and_offers` bit(1) DEFAULT NULL,
-  `emails_genius_programme` bit(1) DEFAULT NULL,
-  `emails_genius_membership` bit(1) DEFAULT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `newsletter_preferences` VALUES ('1','1','1','1','0','0','1','0','1','0','0','0','0','0'),
 ('2','0','0','1','1','1','1','1','1','0','0','0','1','1'),
 ('3','1','0','1','0','1','1','1','1','0','0','1','1','0'),
@@ -2509,13 +2416,6 @@ INSERT INTO `newsletter_preferences` VALUES ('1','1','1','1','0','0','1','0','1'
 ('150','1','1','0','0','1','1','1','1','0','0','1','0','1');  
 
 
-DROP TABLE IF EXISTS `payment_card_types`;
-CREATE TABLE `payment_card_types` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `payment_card_type` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `payment_card_types` VALUES ('1',' unionpay'),
 ('2',' visa'),
 ('3','mastercard'),
@@ -2524,27 +2424,6 @@ INSERT INTO `payment_card_types` VALUES ('1',' unionpay'),
 ('6',' jcb'),
 ('7',' american_express'); 
 
-
-DROP TABLE IF EXISTS `properties`;
-CREATE TABLE `properties` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `property_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `property_type_id` tinyint(3) unsigned NOT NULL,
-  `city_id` int(10) unsigned NOT NULL,
-  `address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `rating` float(2,1) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `city_id` (`city_id`),
-  KEY `user_id` (`user_id`),
-  KEY `property_type_id` (`property_type_id`),
-  KEY `property_name_idx` (`property_name`),
-  CONSTRAINT `properties_ibfk_2` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
-  CONSTRAINT `properties_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CONSTRAINT ON UPDATE CASCADE,
-  CONSTRAINT `properties_ibfk_4` FOREIGN KEY (`property_type_id`) REFERENCES `property_types` (`id`) -- ON DELETE CONSTRAINT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `properties` VALUES ('1','1','est','1','1','3488 Beatty Summit\nSouth Savannah, NH 75520','0.7','1990-11-10 10:25:06','1985-11-08 19:36:31'),
 ('2','2','qui','2','2','2280 Jakubowski Harbors Apt. 094\nJacobiland, NH 60415-8664','7.8','1994-07-20 11:33:48','2000-07-19 20:24:38'),
@@ -2847,23 +2726,6 @@ INSERT INTO `properties` VALUES ('1','1','est','1','1','3488 Beatty Summit\nSout
 ('299','299','ea','5','99','82031 Faye Crossing\nLake Rozella, CA 01934','9.3','2014-08-10 08:39:01','2014-08-22 01:41:28'),
 ('300','300','sit','6','100','0623 Antone Fork Apt. 843\nNorth Marlene, WV 85949','6','1980-05-07 04:42:25','2004-08-13 06:31:48'); 
 
-
-DROP TABLE IF EXISTS `property_profiles`;
-CREATE TABLE `property_profiles` (
-  `property_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `room_type_id` smallint(5) unsigned NOT NULL,
-  `room_count` smallint(6) DEFAULT NULL,
-  `property_facilities` set('parking','lift','24-hour_front_desk','pets_allowed','luggage_storage') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `languages_spoken` set('english','spanish','italian','dutch','french','russian') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `bank_cards_allowed` set('visa','mastercard','JCB','american_express','union_pay','diners_club','mir') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `meals` set('breakfast','lunch','dinner') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  UNIQUE KEY `property_id` (`property_id`),
-  KEY `room_type_id` (`room_type_id`),
-  CONSTRAINT `property_profiles_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `property_profiles_ibfk_2` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) -- ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='описание услуг и удобств объекта недвижимости';
 
 insert INTO `property_profiles` VALUES 
 ('1','1','142',('lift,24-hour_front_desk,pets_allowed,luggage_storage'),('english,spanish,italian,dutch,french,russian'),('visa,mastercard'),('breakfast,dinner'),'1987-03-20 13:31:39','1991-12-23 12:48:21'),
@@ -3168,13 +3030,6 @@ insert INTO `property_profiles` VALUES
 ('300','50','94',('parking,lift,24-hour_front_desk,pets_allowed,luggage_storage'),('english,italian,french,russian'),('visa,mastercard,american_express'),('breakfast,dinner'),'1980-04-27 06:24:43','2010-12-29 17:21:35'); 
 
 
-DROP TABLE IF EXISTS `property_types`;
-CREATE TABLE `property_types` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `property_types` VALUES ('1','hotel'),
 ('2',' hostel'),
 ('3',' guest_house'),
@@ -3183,15 +3038,6 @@ INSERT INTO `property_types` VALUES ('1','hotel'),
 ('6',' villa'),
 ('7',' apartment'); 
 
-
-DROP TABLE IF EXISTS `reservation_emails`;
-CREATE TABLE `reservation_emails` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `upcoming_booking` bit(1) DEFAULT NULL,
-  `review_invites` bit(1) DEFAULT NULL,
-  `booking_confirmation_emails` bit(1) DEFAULT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `reservation_emails` VALUES ('1','0','1','0'),
 ('2','0','0','0'),
@@ -3294,24 +3140,6 @@ INSERT INTO `reservation_emails` VALUES ('1','0','1','0'),
 ('99','1','1','1'),
 ('100','1','0','1');  
 
-
-DROP TABLE IF EXISTS `reviews`;
-CREATE TABLE `reviews` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `property_id` bigint(20) unsigned NOT NULL,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `rating` smallint(6) DEFAULT NULL,
-  `review_heading` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `whats_like` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `whats_dislike` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `property_id` (`property_id`),
-  UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `reviews` VALUES ('1','1','1','4','Debitis perspiciatis sit non laboriosam voluptate ','Hatter: \'but you could only hear whispers now and then, \'we went to school in the pool, \'and she sits purring so nicely by the officers of the.','Lobster Quadrille, that she hardly knew what she did, she picked her way out. \'I shall be late!\'.','2008-05-30 08:31:57','2011-05-21 19:19:30'),
 ('2','2','2','9','Quam aut ullam sapiente.','Alas! it was her dream:-- First, she tried another question. \'What sort of chance of getting up and down in an offended tone. And she squeezed.','VERY ugly; and secondly, because they\'re making such VERY short remarks, and she crossed her hands.','1977-05-23 11:05:25','1999-07-08 00:43:24'),
@@ -3515,23 +3343,6 @@ INSERT INTO `reviews` VALUES ('1','1','1','4','Debitis perspiciatis sit non labo
 ('200','200','200','7','Dolorem quaerat nobis amet aliquam fugiat illum.','And oh, my poor little feet, I wonder what you\'re talking about,\' said Alice. \'That\'s the judge,\' she said to one of them were animals, and some.','But she went on, without attending to her; \'but those serpents! There\'s no pleasing them!\' Alice.','1971-07-05 06:39:10','1992-06-21 23:15:16'); 
 
 
-DROP TABLE IF EXISTS `room_types`;
-CREATE TABLE `room_types` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `room_type` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `max_sleeps` tinyint(4) DEFAULT NULL,
-  `room_size` tinyint(4) DEFAULT NULL,
-  `room_facilities` set('bath','hower','toilet','heating','air_conditioning','TV','cable_internet','Wi-Fi','Telephone','kitchenette') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `bed_type_id` tinyint(3) unsigned NOT NULL,
-  `smoke_allowed` bit(1) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  UNIQUE KEY `id` (`id`),
-  KEY `bed_type_id` (`bed_type_id`),
-  KEY `room_type_idx` (`room_type`),
-  CONSTRAINT `room_types_ibfk_1` FOREIGN KEY (`bed_type_id`) REFERENCES `bed_types` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `room_types` VALUES ('1','occaecati','2','39',('bath,toilet,heating,air_conditioning,TV,cable_internet,Wi-Fi,Telephone,kitchenette'),'1','1','1986-03-12 08:40:26','2003-12-06 03:12:42'),
 ('2','magni','2','37',('shower,toilet,heating,air_conditioning,TV,cable_internet,Wi-Fi,Telephone'),'2','1','1996-05-27 13:13:13','1974-04-02 02:29:35'),
 ('3','ut','3','36',('bath,toilet,heating,air_conditioning,TV,cable_internet,Wi-Fi,Telephone'),'3','1','1999-01-19 20:18:30','1992-12-22 21:38:22'),
@@ -3583,25 +3394,6 @@ INSERT INTO `room_types` VALUES ('1','occaecati','2','39',('bath,toilet,heating,
 ('49','perferendis','1','37',('bath,toilet,heating,air_conditioning,TV,cable_internet,Wi-Fi,Telephone'),'1','1','1973-03-21 23:07:46','1988-04-29 02:01:49'),
 ('50','et','4','32',('bath,toilet,heating,air_conditioning,TV,cable_internet,Wi-Fi,Telephone'),'2','1','1989-07-21 06:55:55','2015-11-03 08:13:07'); 
 
-
-DROP TABLE IF EXISTS `settings`;
-CREATE TABLE `settings` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `preferred_card_types_id` tinyint(3) unsigned NOT NULL,
-  `smoking_preference` enum('yes','no') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `reservation_emails_id` bigint(20) unsigned NOT NULL,
-  `newsletter_preferences_id` bigint(20) unsigned NOT NULL,
-  UNIQUE KEY `id` (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `preferred_card_types_id` (`preferred_card_types_id`),
-  KEY `reservation_emails_id` (`reservation_emails_id`),
-  KEY `newsletter_preferences_id` (`newsletter_preferences_id`),
-  CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) -- ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `settings_ibfk_2` FOREIGN KEY (`preferred_card_types_id`) REFERENCES `payment_card_types` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `settings_ibfk_3` FOREIGN KEY (`reservation_emails_id`) REFERENCES `reservation_emails` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `settings_ibfk_4` FOREIGN KEY (`newsletter_preferences_id`) REFERENCES `newsletter_preferences` (`id`) -- ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `settings` VALUES ('1','1','1','yes','1','1'),
 ('2','2','2','yes','2','2'),
@@ -3804,25 +3596,6 @@ INSERT INTO `settings` VALUES ('1','1','1','yes','1','1'),
 ('199','199','3','no','49','49'),
 ('200','200','4','no','50','50'); 
 
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `lastname` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `password_hash` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phone` bigint(20) unsigned DEFAULT NULL,
-  `gender` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `property_owner` bit,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `phone` (`phone`),
-  KEY `users_firstname_lastname_idx` (`firstname`,`lastname`),
-  KEY `users_lastname_firstname_idx` (`lastname`,`firstname`)
-) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='пользователи';
 
 INSERT INTO `users` VALUES ('1','Jarvis','Hane','renner.sarina@example.net','bf2a4082872bc2ce5fdc442c4ef78320692d96a5','39870487162','m', 0,'1988-03-12 09:26:24','1992-03-01 01:58:44'),
 ('2','Anika','Hammes','lesch.kayleigh@example.com','8b0abd52d65df1012dec5a44b60f573eda8cd32b','90383463404','f',0,'1999-11-23 02:16:55','1991-06-25 05:54:08'),
@@ -4224,15 +3997,3 @@ INSERT INTO `users` VALUES ('1','Jarvis','Hane','renner.sarina@example.net','bf2
 ('398','Liliane','Jakubowski','alverta28@example.net','645d63d74d81fea71f2ee6e00325d006fb063484','96373758059','m',0,'1978-08-11 06:51:05','1988-04-16 11:38:37'),
 ('399','Audie','Ullrich','pnicolas@example.org','1ed27d8b4ac4df5ee7c28d1a2f24de5a1bc8868b','14002760131','f',0,'1979-03-16 15:07:35','1992-09-13 05:54:09'),
 ('400','Ubaldo','Wuckert','abernathy.perry@example.net','f847fb5d6e67411e1a567823b28e1185297d91ac','20497859767','m',1,'2007-01-18 12:29:10','1987-09-08 15:52:30'); 
-
-
-
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
