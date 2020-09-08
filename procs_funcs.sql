@@ -2,9 +2,89 @@ USE booking;
 
 -- Добавление пользователя
 
+drop procedure if exists add_user;
+
+delimiter //
+
+create procedure add_user(firstname VARCHAR(50), lastname VARCHAR(50), email VARCHAR(120), password_hash VARCHAR(100), 
+phone BIGINT, genger CHAR(1), OUT transaction_result VARCHAR(200))
+begin
+	declare is_rollback BOOL default 0;
+	declare code VARCHAR(80);
+	declare error_text VARCHAR(130);
+	
+	declare continue handler for sqlexception
+	begin
+		set is_rollback = 1;
+		get stacked diagnostics condition 1
+			code = RETURNED_SQLSTATE, error_text = MESSAGE_TEXT;
+		set transaction_result = concat (code, '; ', error_text);
+	end;
+	
+	start transaction;
+		insert into users (firstname, lastname, email, password_hash, phone, gender)
+		values (firstname, lastname, email, password_hash, phone, genger);
+		
+	if is_rollback then
+		ROLLBACK;
+	else
+		set transaction_result = 'Transaction complete.';
+		COMMIT;
+	end if;
+end//
+
+delimiter ;
+
+call add_user('John', 'Doe', 'johndoe@example.com', '1be548f4b7d4738743800078e7e1bee9bd5aec11ac', 
+			'44986789543', 'm', @transaction_result);
+select @transaction_result;
+
 
 -- Добавление объекта размещения
 
+drop procedure if exists add_property;
+
+delimiter //
+
+create procedure add_property(user_id bigint, property_name varchar(100), property_type_id tinyint, city_id int, 
+				address varchar(255), room_type_id smallint, room_count smallint, property_facilities varchar(255), 
+				languages_spoken varchar(255), bank_cards_allowed varchar(255), meals varchar(255), OUT transaction_result VARCHAR(200))
+begin
+	declare is_rollback BOOL default 0;
+	declare code VARCHAR(80);
+	declare error_text VARCHAR(130);
+	
+	declare continue handler for sqlexception
+	begin
+		set is_rollback = 1;
+		get stacked diagnostics condition 1
+			code = RETURNED_SQLSTATE, error_text = MESSAGE_TEXT;
+		set transaction_result = concat (code, '; ', error_text);
+	end;
+	
+	start transaction;
+		insert into properties (user_id, property_name, property_type_id, city_id, address)
+		values (user_id, property_name, property_type_id, city_id, address);
+	
+		insert into property_profiles (property_id, room_type_id, room_count, property_facilities, 
+				languages_spoken, bank_cards_allowed, meals)
+		values (last_insert_id(), room_type_id, room_count, (property_facilities), 
+				(languages_spoken), (bank_cards_allowed), (meals));
+		
+	if is_rollback then
+		ROLLBACK;
+	else
+		set transaction_result = 'Transaction complete.';
+		COMMIT;
+	end if;
+end//
+
+delimiter ;
+
+call add_property('26','undeground','1','55','56794 Marianne Squares Suite 186 Sarinatown, WY 23946','1','142',
+			'lift,24-hour_front_desk,pets_allowed,luggage_storage','english,spanish,italian,dutch,french,russian',
+			'visa,mastercard','breakfast,dinner', @transaction_result);
+select @transaction_result;
 
 
 -- Выводит информацию об объектах размещения в указанном городе
@@ -101,8 +181,8 @@ delimiter ;
 call user_bookings('5')
 
 
--- Функция подсчета количества подтвержденных бронирований за последние 2 года для конкретного пользователя для присвоения ему статуса Genius.
--- Программа лояльности Genius в данной БД не реализована.
+-- Функция подсчета количества подтвержденных бронирований за последние 2 года для конкретного пользователя 
+-- для последущего присвоения ему статуса Genius. Программа лояльности Genius в данной БД не реализована.
 
 drop function if exists genius_status_count;
 
