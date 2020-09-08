@@ -1,3 +1,5 @@
+USE booking;
+
 -- Добавление пользователя
 
 
@@ -99,5 +101,28 @@ delimiter ;
 call user_bookings('5')
 
 
--- функция!!!
+-- Функция подсчета количества подтвержденных бронирований за последние 2 года для конкретного пользователя для присвоения ему статуса Genius.
+-- Программа лояльности Genius в данной БД не реализована.
+
+drop function if exists genius_status_count;
+
+delimiter //
+
+create function genius_status_count (for_user BIGINT)
+returns INT READS SQL DATA
+begin
+    declare bookings_count INT;
+    
+    set bookings_count = (select count(*)
+    from bookings as b
+    where b.user_id = for_user 
+    and b.book_type = 'confirmed'
+    and (b.booked_till_date + interval 2 year) < now()); 
+
+    return bookings_count;
+end//
+
+delimiter ;
+
+select genius_status_count(2);
 

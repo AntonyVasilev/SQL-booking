@@ -1,3 +1,5 @@
+USE booking;
+
 -- Представление со всеми объектами размещения с парковкой
 
 create or replace view properties_with_parking as
