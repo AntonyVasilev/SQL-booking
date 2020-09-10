@@ -43,6 +43,7 @@ end//
 
 delimiter ;
 
+/*
 insert into bookings (user_id, property_id, room_type_id, room_count, booked_from_date, booked_till_date, book_type)
 values ('5', '8', '1', '1', '2020-08-15', '2020-08-20', 'requested');
 
@@ -57,6 +58,7 @@ update bookings
 set booked_from_date = '2020-08-15', 
 	booked_till_date = '2020-08-20'
 where id = @insert_id;
+*/
 
 
 -- Тригер, запрещающий изменение города и/или адреса нахождения объекта размещения
@@ -75,6 +77,7 @@ end//
 
 delimiter ;
 
+/*
 update properties 
 set city_id = '5'
 where id = '1';
@@ -87,3 +90,4 @@ update properties
 set address = '56794 Marianne Squares Suite 186 Sarinatown, WY 23946',
 	city_id = '5'
 where id = '3';
+*/

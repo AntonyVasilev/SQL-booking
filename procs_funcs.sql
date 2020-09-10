@@ -35,9 +35,11 @@ end//
 
 delimiter ;
 
+/*
 call add_user('John', 'Doe', 'johndoe@example.com', '1be548f4b7d4738743800078e7e1bee9bd5aec11ac', 
 			'44986789543', 'm', @transaction_result);
 select @transaction_result;
+*/
 
 
 -- Добавление объекта размещения
@@ -81,10 +83,12 @@ end//
 
 delimiter ;
 
+/*
 call add_property('26','undeground','1','55','56794 Marianne Squares Suite 186 Sarinatown, WY 23946','1','142',
 			'lift,24-hour_front_desk,pets_allowed,luggage_storage','english,spanish,italian,dutch,french,russian',
 			'visa,mastercard','breakfast,dinner', @transaction_result);
 select @transaction_result;
+*/
 
 
 -- Выводит информацию об объектах размещения в указанном городе
@@ -118,7 +122,7 @@ end//
 
 delimiter ;
 
-call properties_in_city('Port Rubiemouth');
+-- call properties_in_city('Port Rubiemouth');
 
 
 -- Выводит все объекты размещения в стране с указаным типом кроватей
@@ -149,7 +153,7 @@ end//
 
 delimiter ;
 
-call properties_by_bed('single_bed');
+-- call properties_by_bed('single_bed');
 
 
 -- Выводит все бронирования пользователя
@@ -178,7 +182,7 @@ end//
 
 delimiter ;
 
-call user_bookings('5')
+-- call user_bookings('5')
 
 
 -- Функция подсчета количества подтвержденных бронирований за последние 2 года для конкретного пользователя 
@@ -204,5 +208,5 @@ end//
 
 delimiter ;
 
-select genius_status_count(2);
+-- select genius_status_count(2);
 
