@@ -43,8 +43,7 @@ end//
 
 delimiter ;
 
-/*
-insert into bookings (user_id, property_id, room_type_id, room_count, booked_from_date, booked_till_date, book_type)
+/*insert into bookings (user_id, property_id, room_type_id, room_count, booked_from_date, booked_till_date, book_type)
 values ('5', '8', '1', '1', '2020-08-15', '2020-08-20', 'requested');
 
 set @insert_id = LAST_INSERT_ID(); 
@@ -79,6 +78,7 @@ delimiter ;
 
 /*
 update properties 
+Stashed changes
 set city_id = '5'
 where id = '1';
 
