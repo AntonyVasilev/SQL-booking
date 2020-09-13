@@ -84,7 +84,7 @@ end//
 delimiter ;
 
 /*
-call add_property('26','undeground','1','55','56794 Marianne Squares Suite 186 Sarinatown, WY 23946','1','142',
+call add_property('26','undeground','1','3','56794 Marianne Squares Suite 186 Sarinatown, WY 23946','1','142',
 			'lift,24-hour_front_desk,pets_allowed,luggage_storage','english,spanish,italian,dutch,french,russian',
 			'visa,mastercard','breakfast,dinner', @transaction_result);
 select @transaction_result;
@@ -122,7 +122,7 @@ end//
 
 delimiter ;
 
--- call properties_in_city('Port Rubiemouth');
+-- call properties_in_city('Littelton');
 
 
 -- Выводит все объекты размещения в стране с указаным типом кроватей
@@ -182,7 +182,7 @@ end//
 
 delimiter ;
 
--- call user_bookings('5')
+-- call user_bookings(5);
 
 
 -- Функция подсчета количества подтвержденных бронирований за последние 2 года для конкретного пользователя 

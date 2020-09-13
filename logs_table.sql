@@ -57,7 +57,7 @@ set email = 'jane@example.com'
 where id = last_insert_id();
 
 insert into properties (user_id, property_name, property_type_id, city_id, address)
-    values ('155', 'test hotel', 1, '18', '658 Reyna Lake Lehnerchester, IL 19227-8321');
+    values ('44', 'test hotel', 1, '9', '658 Reyna Lake Lehnerchester, IL 19227-8321');
     
 update properties 
 set property_type_id = 2

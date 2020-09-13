@@ -25,7 +25,7 @@ group by p.city_id
 order by c2.name;
 
 
--- Вывести последние 2 зарегистированных отелея
+-- Вывести последние 2 зарегистированных отеля
 
 select 
     pr.property_name as 'hotel name',
