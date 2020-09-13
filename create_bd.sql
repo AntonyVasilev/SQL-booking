@@ -22,7 +22,8 @@ DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries`(
     id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
     name VARCHAR(50),
-    region VARCHAR(50) -- Africa, Americas, Asia, Europe, Oceania
+    region VARCHAR(50), -- Africa, Americas, Asia, Europe, Oceania
+    INDEX countries_name_idx(name)
 );
 
 DROP TABLE IF EXISTS cities;
@@ -30,7 +31,8 @@ CREATE TABLE cities (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
     country_id SMALLINT UNSIGNED NOT NULL,
     name VARCHAR(50),
-    FOREIGN KEY (country_id) REFERENCES `countries`(id) ON UPDATE CASCADE
+    FOREIGN KEY (country_id) REFERENCES `countries`(id) ON UPDATE CASCADE,
+    INDEX cities_name_idx(name)
 );
 
 DROP TABLE IF EXISTS payment_card_types;
@@ -158,8 +160,8 @@ CREATE TABLE bookings(
 DROP TABLE IF EXISTS reviews; 
 CREATE TABLE reviews(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
-	property_id BIGINT UNSIGNED NOT NULL UNIQUE,
-	user_id BIGINT UNSIGNED NOT NULL UNIQUE,
+	property_id BIGINT UNSIGNED NOT NULL,
+	user_id BIGINT UNSIGNED NOT NULL,
 	rating SMALLINT, -- оценка пользователя
 	review_heading VARCHAR(50), -- заголовок отзыва
 	whats_like VARCHAR (255), -- что понравилось

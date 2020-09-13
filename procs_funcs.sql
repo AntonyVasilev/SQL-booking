@@ -37,9 +37,6 @@ delimiter ;
 
 /*
 call add_user('John', 'Doe', 'johndoe@example.com', '1be548f4b7d4738743800078e7e1bee9bd5aec11ac', 
-=======
-/* call add_user('John', 'Doe', 'johndoe@example.com', '1be548f4b7d4738743800078e7e1bee9bd5aec11ac', 
->>>>>>> Stashed changes
 			'44986789543', 'm', @transaction_result);
 select @transaction_result;
 */
@@ -88,9 +85,6 @@ delimiter ;
 
 /*
 call add_property('26','undeground','1','55','56794 Marianne Squares Suite 186 Sarinatown, WY 23946','1','142',
-=======
-/* call add_property('26','undeground','1','55','56794 Marianne Squares Suite 186 Sarinatown, WY 23946','1','142',
->>>>>>> Stashed changes
 			'lift,24-hour_front_desk,pets_allowed,luggage_storage','english,spanish,italian,dutch,french,russian',
 			'visa,mastercard','breakfast,dinner', @transaction_result);
 select @transaction_result;

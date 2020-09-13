@@ -2,7 +2,7 @@ USE booking;
 
 -- Вывести все отзывы об указанном объекте размещения
 
-set @user = 18;
+set @user = 1;
 select * from reviews where property_id = @user;
 
 
@@ -25,11 +25,16 @@ group by p.city_id
 order by c2.name;
 
 
--- Вывести последние 10 зарегистированных отелей
+-- Вывести последние 2 зарегистированных отелея
 
-select pr.*
+select 
+    pr.property_name as 'hotel name',
+    pt.name as 'type',
+    c.name as 'city',
+    pr.address as 'address',
+    pr.rating as 'rating'
 from properties as pr
 join property_types as pt on pt.id = pr.property_type_id
-where pt.name rlike 'hotel' -- использую rlike, т.к. при заполненении таблицы в названии могут встречаться пробелы в начале
-order by created_at desc
-limit 10; 
+join cities as c on c.id = pr.city_id
+where pt.id = 5
+limit 2; 
